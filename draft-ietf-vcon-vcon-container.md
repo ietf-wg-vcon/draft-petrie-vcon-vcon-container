@@ -81,6 +81,13 @@ normative:
 
   UUID: I-D.draft-peabody-dispatch-new-uuid-format
 
+  DID:
+    target: https://www.w3.org/TR/did-core/
+    title: "Decentralized Identifiers (DIDs) v1.0"
+    author:
+      org: W3C
+    date: July 2022
+
 informative:
 
   CBOR: RFC8949
