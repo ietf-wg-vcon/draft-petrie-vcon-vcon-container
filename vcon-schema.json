@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "vcon-schema.json",
+  "title": "vCon",
+  "description": "Virtual Conversation Container (unsigned form)",
+  "type": "object",
+  "required": ["vcon", "uuid", "created_at", "parties"],
+  "properties": {
+    "vcon": {
+      "type": "string",
+      "const": "0.0.2",
+      "description": "Syntactic version of the JSON format used in the vCon"
+    },
+    "uuid": {
+      "type": "string",
+      "description": "Globally unique identifier for the vCon"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Creation time of this vCon (RFC3339); MUST NOT change after creation"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last modified time of this vCon (RFC3339)"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Subject or topic of the conversation"
+    },
+    "redacted": {
+      "$ref": "vcon-redacted.json",
+      "description": "Reference to the unredacted or prior less-redacted vCon instance version; mutually exclusive with appended and group"
+    },
+    "appended": {
+      "$ref": "vcon-appended.json",
+      "description": "Reference to the prior vCon instance version to which data has been appended; mutually exclusive with redacted and group"
+    },
+    "group": {
+      "type": "array",
+      "items": { "$ref": "vcon-group.json" },
+      "description": "Array of Group Objects aggregating multiple vCons into a single conversation; mutually exclusive with redacted and appended"
+    },
+    "parties": {
+      "type": "array",
+      "items": { "$ref": "vcon-party.json" },
+      "description": "Array of Party Objects for all parties involved in the conversation"
+    },
+    "dialog": {
+      "type": "array",
+      "items": { "$ref": "vcon-dialog.json" },
+      "description": "Array of Dialog Objects containing the captured conversation"
+    },
+    "analysis": {
+      "type": "array",
+      "items": { "$ref": "vcon-analysis.json" },
+      "description": "Array of Analysis Objects containing analysis performed on the conversation"
+    },
+    "attachments": {
+      "type": "array",
+      "items": { "$ref": "vcon-attachment.json" },
+      "description": "Array of Attachment Objects for ancillary documents related to the conversation"
+    }
+  },
+  "not": {
+    "anyOf": [
+      { "required": ["redacted", "appended", "group"] },
+      { "required": ["redacted", "appended"] },
+      { "required": ["redacted", "group"] },
+      { "required": ["appended", "group"] }
+    ]
+  },
+  "$defs": {
+    "ContentHash": {
+      "description": "Single hash token or array of hash tokens for externally referenced content",
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ]
+    }
+  }
+}
